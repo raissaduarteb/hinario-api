@@ -1,0 +1,355 @@
+{
+  "info": {
+    "name": "Hinario API",
+    "_postman_id": "hinario-api-collection",
+    "description": "Collection completa da Hinario API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5252",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Hinos",
+      "item": [
+        {
+          "name": "Listar todos os hinos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino"]
+            }
+          }
+        },
+        {
+          "name": "Buscar hino por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "1"]
+            }
+          }
+        },
+        {
+          "name": "Buscar hino por identificador",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/identificador/C-1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "identificador", "C-1"]
+            },
+            "description": "Identificador pode ser ex: C-1, H-10. Hífens e acentos são normalizados."
+          }
+        },
+        {
+          "name": "Pesquisar hinos (full-text)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/pesquisar?texto=aleluia",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "pesquisar"],
+              "query": [
+                {
+                  "key": "texto",
+                  "value": "aleluia"
+                }
+              ]
+            },
+            "description": "Busca full-text no PostgreSQL via tsvector + GIN index. Resultados rankeados por relevância."
+          }
+        },
+        {
+          "name": "Criar hino",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/hino",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificador\": \"H-1\",\n  \"titulo\": \"Santo, Santo, Santo\",\n  \"letra\": \"Santo, Santo, Santo,\\nSenhor Deus Todo-Poderoso,\\nCedo de manhã a Ti nosso louvor ascende...\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Atualizar hino",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"identificador\": \"H-1\",\n  \"titulo\": \"Santo, Santo, Santo (atualizado)\",\n  \"letra\": \"Letra atualizada do hino...\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Importar hinos (bulk)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/importar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "importar"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"identificador\": \"H-1\",\n    \"titulo\": \"Santo, Santo, Santo\",\n    \"letra\": \"Letra do hino...\"\n  },\n  {\n    \"identificador\": \"C-1\",\n    \"titulo\": \"Cântico 1\",\n    \"letra\": \"Letra do cântico...\"\n  }\n]",
+              "description": "Formato HolyRycs JSON"
+            }
+          }
+        },
+        {
+          "name": "Minerar cântico do site externo",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/minerar/canticos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "minerar", "canticos", "1"]
+            },
+            "description": "Scrape de hinos do site Igreja em Campina Grande. Números válidos: 1–100."
+          }
+        },
+        {
+          "name": "Próximo hino na sequência",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/C/1/proximo",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "C", "1", "proximo"]
+            },
+            "description": "Tipos: H (Hinos) ou C (Cânticos). Número é o dígito do identificador."
+          }
+        },
+        {
+          "name": "Hino anterior na sequência",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/hino/C/1/anterior",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "hino", "C", "1", "anterior"]
+            },
+            "description": "Tipos: H (Hinos) ou C (Cânticos). Número é o dígito do identificador."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Repertórios",
+      "item": [
+        {
+          "name": "Listar todos os repertórios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio"]
+            }
+          }
+        },
+        {
+          "name": "Buscar repertório por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1"]
+            }
+          }
+        },
+        {
+          "name": "Buscar repertório ativo",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/ativo",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "ativo"]
+            }
+          }
+        },
+        {
+          "name": "Próximo hino do repertório",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/hinos/1/proximo",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "hinos", "1", "proximo"]
+            },
+            "description": "Retorna o próximo item baseado na ordem atual."
+          }
+        },
+        {
+          "name": "Hino anterior do repertório",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/hinos/1/anterior",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "hinos", "1", "anterior"]
+            },
+            "description": "Retorna o item anterior baseado na ordem atual."
+          }
+        },
+        {
+          "name": "Criar repertório",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Culto Domingo Manhã\",\n  \"data\": \"2026-04-13\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Atualizar repertório",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Culto Domingo Manhã (atualizado)\",\n  \"data\": \"2026-04-13\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Deletar repertório",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1"]
+            }
+          }
+        },
+        {
+          "name": "Ativar repertório",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/ativar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "ativar"]
+            }
+          }
+        },
+        {
+          "name": "Adicionar hino ao repertório",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/hinos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "hinos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hinoId\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Remover hino do repertório",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/hinos/3",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "hinos", "3"]
+            },
+            "description": "O segundo número é o ID do RepertorioItem (não o ID do hino)."
+          }
+        },
+        {
+          "name": "Reordenar hinos do repertório",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/repertorio/1/hinos/ordem",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "repertorio", "1", "hinos", "ordem"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemIds\": [3, 1, 2]\n}",
+              "description": "Lista de IDs dos RepertorioItens na nova ordem desejada."
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
